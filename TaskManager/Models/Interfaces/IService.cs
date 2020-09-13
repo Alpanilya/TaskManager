@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
 
 namespace TaskManager.Models.Interfaces
 {
-    class IService
+    interface IService<T> where T: IProcess
     {
+        public Task ConvertToListAsync();
     }
 }

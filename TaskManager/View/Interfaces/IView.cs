@@ -6,5 +6,7 @@ namespace TaskManager.View.Interfaces
 {
     interface IView
     {
+        void Show();
+        void Close();
     }
 }

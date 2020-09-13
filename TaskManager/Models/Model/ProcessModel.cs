@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TaskManager.Models.Interfaces;
 
 namespace TaskManager.Models.Model
 {
-    class ProcessModel
+    internal class ProcessModel : IProcess
     {
+        public int Id { get; set; }
+        public string ProcessName { get; set; }
+        public int Priority { get; set; }
     }
 }

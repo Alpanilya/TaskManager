@@ -4,7 +4,8 @@ using System.Text;
 
 namespace TaskManager.View.Interfaces
 {
-    interface IMainForm
+    interface IMainForm: IView
     {
+        void TaskLoad();
     }
 }

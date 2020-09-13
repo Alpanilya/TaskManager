@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using TaskManager.View.Interfaces;
 
 namespace TaskManager
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IMainForm
     {
         public MainForm()
         {
             InitializeComponent();
         }
 
+        public new void Show()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void TaskLoad()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
