@@ -5,14 +5,17 @@ namespace TaskManager
 {
     public partial class MainForm : Form, IMainForm
     {
-        public MainForm()
+        protected ApplicationContext _Context;
+        public MainForm(ApplicationContext Context)
         {
+            _Context = Context;
             InitializeComponent();
         }
 
         public new void Show()
         {
-            throw new System.NotImplementedException();
+            _Context.MainForm = this;
+            Application.Run(_Context);
         }
 
         public void TaskLoad()
