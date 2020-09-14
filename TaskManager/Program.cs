@@ -1,4 +1,5 @@
 using LightInject;
+using NLog;
 using System;
 using System.Windows.Forms;
 using TaskManager.Models.Data;
@@ -15,6 +16,7 @@ namespace TaskManager
         [STAThread]
         static void Main()
         {
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -27,6 +29,7 @@ namespace TaskManager
                 .Register<IMainForm, MainForm>()
                 .Register<MainFormPresenter>();
             ApplicationContoller controller = new ApplicationContoller(container);
+
             controller.Run<MainFormPresenter>();
         }
     }
