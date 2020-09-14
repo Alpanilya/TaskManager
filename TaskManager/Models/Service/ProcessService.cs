@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace TaskManager.Models.Service
     internal class ProcessService : Service<ProcessModel>
     {
         private readonly ManagementEventWatcher _StartWatch, _StopWatch;
+        private Logger log = LogManager.GetCurrentClassLogger();
         public ProcessService(ProcessData ProcessData)
         {
             _ProcessData = ProcessData;
@@ -30,15 +32,20 @@ namespace TaskManager.Models.Service
         }
         public async override Task ConvertToListAsync()
         {
+            log.Debug("Конвертация IAsyncEnumerable в List");
             ProcessesList = await _ProcessData.GetAllProcesses().ToListAsync();
         }
         public async override void StartWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
+            var proc = e.NewEvent.Properties["ProcessName"].Value;
+            log.Debug($"Открытие нового процесса: {proc}");
             await ConvertToListAsync();
             Debug.WriteLine(ProcessesList.Count);
         }
         public async override void StopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
+            var proc = e.NewEvent.Properties["ProcessName"].Value;
+            log.Debug($"Закрытие процесса: {proc}");
             await ConvertToListAsync();
             Debug.WriteLine(ProcessesList.Count);
         }
