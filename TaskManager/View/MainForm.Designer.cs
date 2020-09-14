@@ -32,9 +32,9 @@
             this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartStopButton = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ProcessesList = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ProcessesList)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -70,27 +70,37 @@
             this.StartStopButton.TabIndex = 1;
             this.StartStopButton.Text = "Остановить обновление процеесов";
             this.StartStopButton.UseVisualStyleBackColor = true;
+            this.StartStopButton.Click += new System.EventHandler(this.StartStopButton_Click);
             // 
-            // dataGridView1
+            // ProcessesList
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 24);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullColumnSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(438, 207);
-            this.dataGridView1.TabIndex = 2;
-            this.dataGridView1.Text = "dataGridView1";
+            this.ProcessesList.AllowUserToAddRows = false;
+            this.ProcessesList.AllowUserToDeleteRows = false;
+            this.ProcessesList.AllowUserToResizeRows = false;
+            this.ProcessesList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ProcessesList.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.ProcessesList.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            this.ProcessesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ProcessesList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ProcessesList.Location = new System.Drawing.Point(0, 24);
+            this.ProcessesList.MultiSelect = false;
+            this.ProcessesList.Name = "ProcessesList";
+            this.ProcessesList.ReadOnly = true;
+            this.ProcessesList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ProcessesList.ShowCellErrors = false;
+            this.ProcessesList.ShowCellToolTips = false;
+            this.ProcessesList.ShowEditingIcon = false;
+            this.ProcessesList.Size = new System.Drawing.Size(438, 207);
+            this.ProcessesList.TabIndex = 2;
+            this.ProcessesList.Text = "dataGridView1";
+            this.ProcessesList.VirtualMode = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(438, 254);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.ProcessesList);
             this.Controls.Add(this.StartStopButton);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -98,7 +108,7 @@
             this.Text = "Task Manager";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ProcessesList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,7 +120,7 @@
         private System.Windows.Forms.ToolStripMenuItem FileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitMenuItem;
         private System.Windows.Forms.Button StartStopButton;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView ProcessesList;
     }
 }
 

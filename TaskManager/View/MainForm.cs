@@ -1,9 +1,15 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using TaskManager.Models.Model;
+using TaskManager.Models.Service;
+using TaskManager.Presenter;
 using TaskManager.View.Interfaces;
 
 namespace TaskManager
 {
-    public partial class MainForm : Form, IMainForm
+    internal partial class MainForm : Form, IMainForm
     {
         protected ApplicationContext _Context;
         public MainForm(ApplicationContext Context)
@@ -11,16 +17,20 @@ namespace TaskManager
             _Context = Context;
             InitializeComponent();
         }
-
         public new void Show()
         {
             _Context.MainForm = this;
             Application.Run(_Context);
         }
-
-        public void TaskLoad()
+        public async Task TaskLoad(ProcessService ProcessService)
         {
-            throw new System.NotImplementedException();
+            await ProcessService.ConvertToListAsync();
+            ProcessesList.DataSource = ProcessService.ProcessesList;
+        }
+        private void StartStopButton_Click(object sender, System.EventArgs e)
+        {
+            //ProcessesList.Refresh();
+            //ProcessesList.Update();
         }
     }
 }

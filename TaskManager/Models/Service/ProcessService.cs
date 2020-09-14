@@ -32,13 +32,15 @@ namespace TaskManager.Models.Service
         {
             ProcessesList = await _ProcessData.GetAllProcesses().ToListAsync();
         }
-        public override void StartWatch_EventArrived(object sender, EventArrivedEventArgs e)
+        public async override void StartWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            Debug.WriteLine(_ProcessData.GetAllProcesses().CountAsync());
+            await ConvertToListAsync();
+            Debug.WriteLine(ProcessesList.Count);
         }
-        public override void StopWatch_EventArrived(object sender, EventArrivedEventArgs e)
+        public async override void StopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            Debug.WriteLine(_ProcessData.GetAllProcesses().CountAsync());
+            await ConvertToListAsync();
+            Debug.WriteLine(ProcessesList.Count);
         }
     }
 }

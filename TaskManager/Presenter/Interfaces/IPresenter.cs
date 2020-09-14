@@ -1,8 +1,10 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace TaskManager.Presenter.Interfaces
 {
     interface IPresenter
     {
-        void Run();
+        Task Run();
     }
 }
