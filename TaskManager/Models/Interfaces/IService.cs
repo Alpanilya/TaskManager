@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Management;
 
 namespace TaskManager.Models.Interfaces
 {
     interface IService<T> where T: IProcess
     {
-        public Task ConvertToListAsync();
+        void StopWatch_EventArrived(object sender, EventArrivedEventArgs e);
+        void StartWatch_EventArrived(object sender, EventArrivedEventArgs e);
     }
 }

@@ -1,7 +1,4 @@
-﻿using NLog;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Threading.Tasks;
@@ -14,7 +11,7 @@ namespace TaskManager.Models.Service
     internal class ProcessService : Service<ProcessModel>
     {
         private readonly ManagementEventWatcher _StartWatch, _StopWatch;
-        private Logger log = LogManager.GetCurrentClassLogger();
+        protected static IAsyncEnumerable<ProcessModel> ProcessesEnumAsync => _ProcessData.GetAllProcesses();
         public ProcessService(ProcessData ProcessData)
         {
             _ProcessData = ProcessData;
@@ -30,24 +27,19 @@ namespace TaskManager.Models.Service
             _StopWatch.EventArrived += StopWatch_EventArrived;
             _StopWatch.Start();
         }
-        public async override Task ConvertToListAsync()
+        public static async Task<List<ProcessModel>> ConvertToListAsync()
         {
-            log.Debug("Конвертация IAsyncEnumerable в List");
-            ProcessesList = await _ProcessData.GetAllProcesses().ToListAsync();
+            return await ProcessesEnumAsync.ToListAsync().ConfigureAwait(false);
         }
-        public async override void StartWatch_EventArrived(object sender, EventArrivedEventArgs e)
+        public override void StartWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            var proc = e.NewEvent.Properties["ProcessName"].Value;
-            log.Debug($"Открытие нового процесса: {proc}");
-            await ConvertToListAsync();
-            Debug.WriteLine(ProcessesList.Count);
+            var newProc = e.NewEvent.Properties["ProcessName"].Value.ToString();
+            _Log.Debug($"Открытие нового процесса: {newProc}");
         }
-        public async override void StopWatch_EventArrived(object sender, EventArrivedEventArgs e)
+        public override void StopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            var proc = e.NewEvent.Properties["ProcessName"].Value;
-            log.Debug($"Закрытие процесса: {proc}");
-            await ConvertToListAsync();
-            Debug.WriteLine(ProcessesList.Count);
+            var oldProc = e.NewEvent.Properties["ProcessName"].Value.ToString();
+            _Log.Debug($"Открытие нового процесса: {oldProc}");
         }
     }
 }
