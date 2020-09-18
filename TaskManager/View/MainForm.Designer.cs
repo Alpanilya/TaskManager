@@ -97,6 +97,7 @@
             this.ProcessesList.MultiSelect = false;
             this.ProcessesList.Name = "ProcessesList";
             this.ProcessesList.ReadOnly = true;
+            this.ProcessesList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ProcessesList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ProcessesList.ShowCellErrors = false;
             this.ProcessesList.ShowCellToolTips = false;
@@ -104,7 +105,6 @@
             this.ProcessesList.Size = new System.Drawing.Size(589, 361);
             this.ProcessesList.TabIndex = 2;
             this.ProcessesList.Text = "dataGridView1";
-            this.ProcessesList.VirtualMode = true;
             this.ProcessesList.Click += new System.EventHandler(this.ProcessesList_Click);
             this.ProcessesList.DoubleClick += new System.EventHandler(this.ProcessesList_DoubleClick);
             // 
@@ -141,7 +141,7 @@
             this.TabShowMoreProcess.Location = new System.Drawing.Point(4, 24);
             this.TabShowMoreProcess.Name = "TabShowMoreProcess";
             this.TabShowMoreProcess.Padding = new System.Windows.Forms.Padding(3);
-            this.TabShowMoreProcess.Size = new System.Drawing.Size(595, 343);
+            this.TabShowMoreProcess.Size = new System.Drawing.Size(595, 367);
             this.TabShowMoreProcess.TabIndex = 1;
             this.TabShowMoreProcess.Text = "Подробнее";
             this.TabShowMoreProcess.UseVisualStyleBackColor = true;

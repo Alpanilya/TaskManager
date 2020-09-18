@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TaskManager.Models.Model;
@@ -50,10 +50,9 @@ namespace TaskManager
 
         #region ButtonClick
 
-        private void StartStopButton_Click(object sender, System.EventArgs e)
+        private async void StartStopButton_Click(object sender, System.EventArgs e)
         {
             IsUpdate = !IsUpdate;
-            Debug.WriteLine(ProcessesList.RowCount);
             if (!IsUpdate)
             {
                 _Log.Debug("Нажатие кнопки кнопки StopButton");
@@ -63,81 +62,78 @@ namespace TaskManager
             {
                 _Log.Debug("Нажатие кнопки кнопки StartButton");
                 StartStopButton.Text = "Остановить обновление процессов";
-                BackgroundWorker backgroundWorker = new BackgroundWorker
-                {
-                    WorkerReportsProgress = true
-                };
-                backgroundWorker.DoWork += BackgroundWorker_DoWork;
-                backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
-                backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
-                backgroundWorker.RunWorkerAsync();
+                //BackgroundWorker backgroundWorker = new BackgroundWorker
+                //{
+                //    WorkerReportsProgress = true
+                //};
+                //backgroundWorker.DoWork += BackgroundWorker_DoWork;
+                //backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
+                //backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+                //backgroundWorker.RunWorkerAsync();
             }
+            await DoWork();
+
         }
 
         #endregion
 
         #region RunWorkerCompleted
 
-        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _Log.Debug("Datagridview обновление данных");
-            ProcessesList.DataSource = ProcessesModel;
-        }
+        //private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    _Log.Debug("Datagridview обновление данных");
+        //    ProcessesList.DataSource = ProcessesModel;
+        //}
 
         #endregion
 
         #region ProgressChanged
 
-        private async void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+
+        private async Task ReportProgress()
         {
-            if (e.UserState != null)
+            await Task.Run(async () =>
             {
-                await Task.Run(() =>
+                if (!IsUpdate) return;
+                while (IsUpdate)
                 {
-                    try
-                    {
-                        var tmp = (IEnumerable<ProcessModel>)e.UserState;
-                        ObservableCollection<ProcessModel> collection = new ObservableCollection<ProcessModel>(tmp);
+                    var result = await ProcessService.ConvertToListAsync().ConfigureAwait(false);
+                    await Task.Delay(500);
+                    ObservableCollection<ProcessModel> collection = new ObservableCollection<ProcessModel>(result);
 
                     if (this.InvokeRequired)
-                    {
-                            this.BeginInvoke(new Action(() =>
-                            {
-                                ProcessesModel = collection;
-                                ProcessesList.DataSource = ProcessesModel;
-                                Task.Delay(5000);
-                            }));
-                    }
+                        this.BeginInvoke(new Action(() =>
+                        {
+                            ProcessesModel = collection;
+                            ProcessesList.DataSource = ProcessesModel;
+                            //ProcessesList.Refresh(); Почему-то не обновляется таким способом 
+                            //ProcessesList.Update();
+                            Debug.WriteLine("1" + ProcessesModel.Count + " " + ProcessesList.RowCount + "\n");
+                        }));
                     else
                     {
                         ProcessesModel = collection;
                         ProcessesList.DataSource = ProcessesModel;
-                            Task.Delay(5000);
+                        //ProcessesList.Refresh();
+                        //ProcessesList.Update();
+                        Debug.WriteLine("2" + ProcessesModel.Count + " " + ProcessesList.RowCount + "\n");
                     }
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        _Log.Fatal($"При изменении ObservableColletion произошла ошибка {ex}");
-                    }
-                }).ConfigureAwait(false);
-                Debug.WriteLine("ob" + ProcessesModel.Count + ProcessesList.RowCount);
-            }
+                }
+            }).ConfigureAwait(false);
         }
 
         #endregion
 
         #region DoWork
-
-        private async void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private async Task DoWork()
         {
-            while(IsUpdate)
+            if (!IsUpdate) return;
+            await Task.Run( async () =>
             {
-                var result = await ProcessService.ConvertToListAsync().ConfigureAwait(false);
-                e.Result = result;
                 if (this.InvokeRequired)
-                    this.Invoke(new Action( () =>((BackgroundWorker)sender).ReportProgress(result.Count, e.Result)));
-                else ((BackgroundWorker)sender).ReportProgress(result.Count, e.Result);
-            }
+                    this.BeginInvoke(new Action(async () => await ReportProgress()));
+                else await ReportProgress();
+            }).ConfigureAwait(false);
         }
 
         #endregion
@@ -157,7 +153,6 @@ namespace TaskManager
             LabelId.Text = p.Id.ToString();
             LabelProcessName.Text = p.ProcessName;
             LabelPriority.Text = p.Priority.ToString();
-
         }
 
         #endregion
